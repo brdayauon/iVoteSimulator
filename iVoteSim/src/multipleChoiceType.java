@@ -6,19 +6,13 @@ import java.util.Iterator;
 public class multipleChoiceType implements VotingService {
     private final Question question;
     private final HashMap<String, ArrayList<Answer>> studentAnswers;
-    private final HashMap<String, Integer> results;
+    private final HashMap<String, Integer> studentResults;
     private int total;
-
-//    public multipleChoiceType(){
-//        question = null;
-//        studentAnswers = new HashMap<>();
-//        results = new HashMap<>();
-//    }
 
     public multipleChoiceType(Question question) {
         this.question = question;
         studentAnswers = new HashMap<>();
-        results = new HashMap<>();
+        studentResults = new HashMap<>();
     }
 
     @Override
@@ -28,14 +22,6 @@ public class multipleChoiceType implements VotingService {
 
         if (studentAnswers.get(identifier) != null) {
             studentAnswers.remove(identifier);
-        }
-
-        assert question != null;
-        ArrayList<Answer> possibilities = question.answerArrayList();
-        for (Answer possibility : possibilities) {
-            if (!results.containsKey(possibility.toString())) {
-                results.put(possibility.toString(), 0);
-            }
         }
 
         for (Answer check : answers) {
@@ -52,31 +38,36 @@ public class multipleChoiceType implements VotingService {
     @Override
     public void displayAllAnswers() {
         Iterator<String> it = studentAnswers.keySet().iterator();
-        results.clear();
+        studentResults.clear();
 
         while (it.hasNext()) {
 
             ArrayList<Answer> answers = studentAnswers.get(it.next());
             for (Answer answer : answers) {
-                String key = answer.toString();
-                if (!results.containsKey(key))
-                    results.put(key, 1);
-                else {
-                    results.put(key, results.get(key) + 1);
+                String k = answer.toString();
+
+                //if dont exist then set to 1
+                if (!studentResults.containsKey(k))
+                    studentResults.put(k, 1);
+                else { //if exist in table then += 1
+                    int temp = studentResults.get(k);
+                    temp += 1;
+                    studentResults.put(k, temp);
                 }
             }
         }
 
-            //print results
-            it = results.keySet().iterator();
-            System.out.println("Results for \"" + question + "\": ");
+        //print everything here
+        System.out.println("\n" + "Final Answers for \"" + question + "\": ");
 
-            while (it.hasNext()) {
-                String key = it.next();
-                System.out.print(key + ": ");
-                System.out.println(results.get(key));
-                this.total += 1;
-            }
+        //print final statistics
+        it = studentResults.keySet().iterator();
+        while (it.hasNext()) {
+            String k = it.next();
+            System.out.println("\t\t" + k + ": " + studentResults.get(k));
+            this.total += studentResults.get(k);
+        }
+        System.out.println("The total amount of people who voted is: " + this.total);
 
         }
     }

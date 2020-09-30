@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public interface VotingService {
 
-    //receive answers
+    //receive answer from a "user"
      void getAnswer(ArrayList<Answer> answers, String identifier);
 
     //shows the answer

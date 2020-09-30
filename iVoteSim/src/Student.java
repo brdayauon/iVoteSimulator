@@ -19,15 +19,4 @@ public class Student {
         return studentID;
     }
 
-    @Override
-    public boolean equals(Object other) {
-        return other.toString().equals(studentID);
-    }
-
-    //	each Student should have a unique student ID
-   // @Override
-    public String identifier() {
-        return studentID;
-    }
-
 }
